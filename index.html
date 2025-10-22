@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador Profesional de Oficinas</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <div class="header-content">
+      <h1>📂 Generador Profesional de Oficinas</h1>
+      <p class="subtitle">Crea, organiza y exporta tus listas de oficinas fácilmente</p>
+    </div>
+  </header>
+
+  <main class="container fade-in">
+    <div class="form-section">
+      <div class="form-group">
+        <label>Lista de Oficinas <span>(uno por línea)</span></label>
+        <textarea id="oficinas" rows="8" placeholder="Ejemplo: 0724"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Clave de usuario</label>
+          <input type="text" id="usuario" placeholder="Ejemplo: 132605">
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de puesto</label>
+          <select id="puesto">
+            <option>JEFE DE SERVICIOS</option>
+            <option>PROMOTOR DE VENTAS</option>
+            <option>JEFE DE RECAUDACION</option>
+            <option>JEFE DE OFICINA</option>
+            <option>DIRECTOR OPERATIVO</option>
+            <option>JEFE DE PERSONAL</option>
+            <option>AUDITOR</option>
+            <option>JEFE DE SERVICIOS MEDICO</option>
+            <option>AUXILIAR DE SERVICIOS</option>
+            <option>JEFE DE TAQUILLAS</option>
+            <option>JEFE DE PRESTACIONES</option>
+            <option>JEFE DE NOMINAS</option>
+            <option>AUXILIAR DE NOMINAS</option>
+            <option>CAJERO RECAUDADOR</option>
+            <option>ADMINISTRATIVO RECAUDACION</option>
+            <option>COORDINADOR DE RECAUDACIONES</option>
+            <option>ANALISTA DE LOGISTICA</option>
+            <option>CAJERO ADMINISTRATIVO</option>
+            <option>ENCARGADO DE VALORES</option>
+            <option>SUPERVISOR DE CALL CENTER</option>
+            <option>AGENTES DE CALL CENTER</option>
+            <option>PROMOTOR DE VENTAS Y SERVICIOS</option>
+            <option>COORDINADOR OPERATIVO</option>
+            <option>GERENTE OPERATIVO</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button class="primary" onclick="generar()">✨ Generar</button>
+        <button class="success" onclick="descargarExcel()">📊 Descargar Excel</button>
+        <button class="info" onclick="descargarWord()">📝 Descargar Word</button>
+      </div>
+    </div>
+
+    <div class="output fade-in">
+      <h3>📄 Resultado generado</h3>
+      <pre id="resultado"></pre>
+      <div id="errores" class="error"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 <b>Generador Profesional</b> — Desarrollado por <span class="marca">EMOC</span></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
