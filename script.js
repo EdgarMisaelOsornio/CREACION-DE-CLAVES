@@ -138,7 +138,7 @@ const oficinasMap = {
 "U466":"UTF","U468":"UIS","U469":"ANC","U582":"BEE","U723":"EWX","U724":"OWX","U727":"BRW","U728":"FTW",
 "U729":"PWX","U730":"GWW","U744":"EHO","U745":"MJN","U750":"HBF","U754":"AEW","U765":"BGO","U768":"BWO",
 "U770":"LYW","V417":"MWQ","V619":"KLD","V621":"KAI","V623":"KFW","V627":"KAU","V628":"KDL","V631":"KHG",
-"V633":"LII"
+"V633":"LII","0853":"OBR"
 };
 
 // --- Mapa de abreviaturas y direcciones ---
