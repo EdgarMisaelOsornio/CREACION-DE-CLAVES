@@ -211,3 +211,31 @@ footer .marca {
     font-size: 1.4em;
   }
 }
+
+/* ====== ESTILOS DEL BUSCADOR ====== */
+
+.search-section {
+  margin-bottom: 30px;
+}
+
+.search-results {
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  display: none;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.search-item {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.search-item:hover {
+  background: #eef2ff;
+}

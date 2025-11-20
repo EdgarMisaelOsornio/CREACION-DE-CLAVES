@@ -1,3 +1,151 @@
+let baseOficinas = [];
+
+// === CARGAR EXCEL AUTOMÁTICAMENTE Y NORMALIZAR CLAVE A 4 DÍGITOS ===
+async function cargarExcelBuscador() {
+    try {
+        const response = await fetch("OFICINAS NOMENCLATURAS.xlsx");
+        const data = await response.arrayBuffer();
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+        // Convertir filas y normalizar CLAVE a string de 4 dígitos
+        baseOficinas = XLSX.utils.sheet_to_json(sheet).map(row => {
+            let clave = (row.CLAVE ?? "").toString().trim();
+
+            if (/^\d+$/.test(clave)) {
+                clave = clave.padStart(4, "0");
+            } else if (clave.length > 0 && clave.length < 4) {
+                clave = clave.padStart(4, "0");
+            }
+
+            return {
+                ...row,
+                CLAVE: clave
+            };
+        });
+
+        console.log("🟢 Base de oficinas cargada (normalizada):", baseOficinas.length, "registros");
+    } catch (e) {
+        console.error("❌ Error cargando Excel:", e);
+    }
+}
+
+cargarExcelBuscador();
+
+
+// === BUSQUEDA DINÁMICA ===
+document.addEventListener("DOMContentLoaded", () => {
+    const inputBuscador = document.getElementById("buscar");
+    const boxResultados = document.getElementById("resultadosBusqueda");
+
+    if (!inputBuscador || !boxResultados) return;
+
+    inputBuscador.addEventListener("input", () => {
+        const raw = inputBuscador.value.trim();
+        const q = raw.toLowerCase();
+
+        if (q.length < 1) {
+            boxResultados.style.display = "none";
+            boxResultados.innerHTML = "";
+            return;
+        }
+
+        // Build padded variant for numeric queries
+        let qPad = null;
+        if (/^\d+$/.test(raw)) {
+            qPad = raw.padStart(4, "0");
+        }
+
+        const coincidencias = baseOficinas.filter(item => {
+            const clave = (item.CLAVE ?? "").toString().toLowerCase();
+            const nombre = (item.NOMBRE ?? "").toString().toLowerCase();
+            const nom = (item.NOMENCLATURA ?? "").toString().toLowerCase();
+            const dir = (item.DIRECCION ?? "").toString().toLowerCase();
+
+            if (clave.includes(q) || (qPad && clave.includes(qPad))) return true;
+
+            if (/^\d+$/.test(raw)) {
+                const claveSinCeros = clave.replace(/^0+/, "");
+                if (claveSinCeros.includes(raw.replace(/^0+/, ""))) return true;
+            }
+
+            if (nombre.includes(q) || nom.includes(q) || dir.includes(q)) return true;
+
+            return false;
+        });
+
+        if (coincidencias.length === 0) {
+            boxResultados.style.display = "block";
+            boxResultados.innerHTML = `<p style="padding:10px;margin:0;">No se encontraron resultados...</p>`;
+            return;
+        }
+
+        boxResultados.style.display = "block";
+        boxResultados.innerHTML = coincidencias
+            .map(r => `
+                <div class="search-item" data-clave="${r.CLAVE ?? ""}">
+                    <b>${r.CLAVE ?? ""}</b> — ${r.NOMBRE ?? ""}
+                    <br>
+                    <small>${r.NOMENCLATURA ?? ""} | ${r.DIRECCION ?? ""}</small>
+                </div>
+            `)
+            .join("");
+
+        // Delegated click handler is implemented outside this input handler
+    });
+
+    // Delegation: single listener for clicks inside boxResultados
+    boxResultados.addEventListener("click", (ev) => {
+        const item = ev.target.closest(".search-item");
+        if (!item) return;
+        const claveSelRaw = (item.dataset.clave ?? "").toString().trim();
+        if (!claveSelRaw) return;
+
+        const claveSel = claveSelRaw.padStart(4, "0");
+        const textarea = document.getElementById("oficinas");
+        const erroresEl = document.getElementById("errores");
+        const inputBuscadorEl = document.getElementById("buscar");
+
+        // Normalize existing lines
+        const lines = textarea.value
+            .split(/\r?\n/)
+            .map(l => l.trim())
+            .filter(Boolean);
+
+        const linesNorm = lines.map(l => l.padStart(4, "0"));
+
+        if (linesNorm.includes(claveSel)) {
+            // show warning in errores element temporarily
+            if (erroresEl) {
+                erroresEl.textContent = `⚠️ La clave ${claveSel} ya existe en la lista.`;
+                erroresEl.style.display = "block";
+                setTimeout(() => {
+                    erroresEl.textContent = "";
+                    erroresEl.style.display = "";
+                }, 3000);
+            } else {
+                alert(`La clave ${claveSel} ya existe en la lista.`);
+            }
+            // clear search
+            inputBuscadorEl.value = "";
+            boxResultados.style.display = "none";
+            boxResultados.innerHTML = "";
+            return;
+        }
+
+        // Add to textarea
+        lines.push(claveSel);
+        textarea.value = lines.join("\n");
+        textarea.scrollTop = textarea.scrollHeight;
+        textarea.focus();
+
+        // clear search
+        inputBuscadorEl.value = "";
+        boxResultados.style.display = "none";
+        boxResultados.innerHTML = "";
+    });
+});
+/* ============================================================ */
 // --- Mapa de oficinas y abreviaturas ---
 const oficinasMap = {
 "0001":"MXN","0002":"PCH","0003":"ACT","0004":"IXM","0005":"HUI","0007":"TEC","0008":"SJR","0010":"QRO",
@@ -1048,7 +1196,7 @@ const direccionesMap = {
   "LSY": "ALIANZAS COMERCIALES- CUENTAS CORPORATIVAS",
   "LXF": "ALIANZAS COMERCIALES- CUENTAS CORPORATIVAS",
   "SZG": "ALIANZAS COMERCIALES- CUENTAS CORPORATIVAS",
-    "GJD": "ALIANZAS COMERCIALES- CUENTAS CORPORATIVAS",
+  "GJD": "ALIANZAS COMERCIALES- CUENTAS CORPORATIVAS",
   "EFO": "AEB DIGITAL-ESTRELLA BLANCA DIGITAL",
   "MST": "AEB DIGITAL-ESTRELLA BLANCA DIGITAL",
   "KSU": "ALIANZAS COMERCIALES- CUENTAS CORPORATIVAS",
