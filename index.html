@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador de Oficinas</title>
+
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
@@ -19,16 +20,29 @@
   </header>
 
   <main class="container fade-in">
-    <!-- ================= BUSCADOR DE OFICINAS ================= -->
-<div class="search-section">
-  <label for="buscar">🔍 Buscar oficina / clave / nomenclatura / dirección</label>
-  <input type="text" id="buscar" placeholder="Ejemplo: 0001, CENTRAL, NOM, REFORMA...">
-  <div id="resultadosBusqueda" class="search-results"></div>
-</div>
-<!-- ========================================================= -->
+
+    <!-- FILTRO DE DIRECCIONES -->
+    <div class="form-group">
+      <label>Seleccionar Dirección</label>
+      <select id="filtroDireccion">
+          <option value="">-- Selecciona una Dirección --</option>
+      </select>
+    </div>
+
+    <button class="primary" onclick="agregarOficinasPorDireccion()">➕ Agregar Oficinas de la Dirección</button>
+    <br><br>
+
+    <!-- BUSCADOR -->
+    <div class="search-section">
+      <label>Buscar Oficina</label>
+      <input type="text" id="buscar" placeholder="Escribe número, nombre o dirección…">
+      <div id="resultadosBusqueda" class="search-results"></div>
+    </div>
+
+    <!-- FORMULARIO PRINCIPAL -->
     <div class="form-section">
       <div class="form-group">
-        <label>Lista de Oficinas <span>(uno por línea)</span> <span>(4 digitos, Agregar 0 a la izquierda si es necesario)</span> </label>
+        <label>Lista de Oficinas <span>(una por línea)</span></label>
         <textarea id="oficinas" rows="8" placeholder="Ejemplo: 0724"></textarea>
       </div>
 
@@ -48,7 +62,7 @@
             <option>AUXILIAR DE AREA CORPORATIVO</option>
             <option>AUXILIAR DE NOMINAS</option>
             <option>AUXILIAR DE SERVICIOS</option>
-			<option>AUXILIAR ADMINISTRATIVO</option>
+            <option>AUXILIAR ADMINISTRATIVO</option>
             <option>CAJERO RECAUDADOR</option>
             <option>COORDINADOR COMERCIAL</option>
             <option>COORDINADOR DE RECAUDACIONES</option>
@@ -96,12 +110,14 @@
       <pre id="resultado"></pre>
       <div id="errores" class="error"></div>
     </div>
+
   </main>
 
   <footer>
-    <p>© 2025 <b>Generador Profesional</b> — Desarrollado por <span class="marca">EMOC</span></p>
+    <p>© 2025 Generador Profesional — Desarrollado por EMOC</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script type="module" src="js/main.js"></script>
+
 </body>
 </html>
